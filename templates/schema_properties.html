@@ -1,0 +1,37 @@
+<!--<ul style="list-style-type:none">-->
+    <!--<li>-->
+        <button type="button" class="collapsible">{{ schema['title'] }}</button>
+        <div class="content row">
+            <div class="column" id="{{ schema['name'] }}">
+                {% if schema['pre-selected'] == True %}
+                <input type="checkbox" name="schema" class="schema" value="{{ schema['name'] }}" checked>{{ schema['title'] }}
+                {% else %}
+                <input type="checkbox" name="schema" class="schema" value="{{ schema['name'] }}">{{ schema['title'] }}
+                {% endif %}
+                <br>
+                <ul style="list-style-type:none">
+                     {% for property in schema['properties'] %}
+                        {% if schema['properties'][property] == 'required' %}
+                    <li><input type="checkbox" name="property" class="property disabled" value="{{ schema['name'] }}:{{ property }}" checked onclick="this.checked=!this.checked;">{{ property ~ '*' }}</li>
+                        {% elif schema['properties'][property] == 'pre-selected' %}
+                    <li><input type="checkbox" name="property" class="property" value="{{ schema['name'] }}:{{ property }}" checked >{{ property }}</li>
+                        {% else %}
+                    <li><input type="checkbox" name="property" class="property" value="{{ schema['name'] }}:{{ property }}">{{ property }}</li>
+                        {% endif %}
+                    {% endfor %}
+                    <li><input type="button" class="btn btn-sml {{ schema['name'] }} addProperty" id="{{ 'addProperty:' ~ schema['name'] }}" value="Add property"></li>
+                </ul>
+            </div>
+            <div class="column local_selects">
+                <!--<div class="local_selects">-->
+                    <br>
+                    <button type="button" class="btn btn-primary selectLocal" id="{{ 'select:' ~ schema['name'] }}">Select all properties in section</button>
+                    <br>
+                    <br>
+                    <br>
+                    <button type="button" class="btn btn-primary {{ schema['name'] }} unselectLocal" id="{{ 'unselect:' ~ schema['name'] }}">Unselect all properties in section</button>
+                <!--</div>-->
+            </div>
+        </div>
+    <!--</li>-->
+<!--</ul>-->
