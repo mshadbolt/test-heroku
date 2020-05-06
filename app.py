@@ -188,6 +188,8 @@ def generate_yaml():
         entry = {}
         tab = {}
 
+        sys.stdout.write(str(DISPLAY_NAME_MAP))
+
         if DISPLAY_NAME_MAP[schema]:
             tab["display_name"] = DISPLAY_NAME_MAP[schema]
         else:
