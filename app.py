@@ -712,32 +712,26 @@ def _get_value_for_column(col_name, property):
         return ""
 
 
+logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+
+CONFIG_FILE = _loadConfig('config.ini')
+
+env = ''
+if 'system' in CONFIG_FILE and 'environment' in CONFIG_FILE['system']:
+    env = CONFIG_FILE['system']['environment']
+
+if env == 'prod':
+    api_url = INGEST_API_URL.replace("{env}.", '')
+else:
+    api_url = INGEST_API_URL.replace("{env}", env)
+
+sys.stdout.write(env + " environment selected.\n")
+
+SCHEMA_TEMPLATE = SchemaTemplate(ingest_api_url=api_url,
+                                     migrations_url='https://schema.dev.data.humancellatlas.org/property_migrations')
+sys.stdout.write("schema template loaded\n")
+sys.stdout.write(str(SCHEMA_TEMPLATE.tab_config))
+
 # main launcher for running the app locally
 if __name__ == '__main__':
-
-    logging.basicConfig(stream=sys.stdout, level=logging.INFO)
-
-    # if '/generator' in dir:
-    #     dir = dir.replace('/generator', '')
-    # base_uri = dir + "/"
-
-
-    CONFIG_FILE = _loadConfig('config.ini')
-
-    env = ''
-    if 'system' in CONFIG_FILE and 'environment' in CONFIG_FILE['system']:
-        env = CONFIG_FILE['system']['environment']
-
-    if env == 'prod':
-        api_url = INGEST_API_URL.replace("{env}.", '')
-    else:
-        api_url = INGEST_API_URL.replace("{env}", env)
-
-    sys.stdout.write(env + "environment selected.\n")
-
-    SCHEMA_TEMPLATE = SchemaTemplate(ingest_api_url=api_url,
-                                     migrations_url='https://schema.dev.data.humancellatlas.org/property_migrations')
-    sys.stdout.write("schema template loaded\n")
-    sys.stdout.write(str(SCHEMA_TEMPLATE.tab_config))
-
     app.run(threaded=True, port=5000)
