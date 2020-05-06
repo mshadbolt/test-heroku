@@ -173,6 +173,8 @@ def generate_yaml():
 
     response = request.form
 
+    sys.stdout.write(str(DISPLAY_NAME_MAP))
+
     # get the list of selected schemas and properties from the request
     selected_schemas = []
     if 'schema' in response:
@@ -187,8 +189,6 @@ def generate_yaml():
     for schema in selected_schemas:
         entry = {}
         tab = {}
-
-        sys.stdout.write(str(DISPLAY_NAME_MAP))
 
         if DISPLAY_NAME_MAP[schema]:
             tab["display_name"] = DISPLAY_NAME_MAP[schema]
@@ -219,7 +219,7 @@ def generate_yaml():
                              filename=filename)
         return response
 
-    # to generate a spreadsheet, conver the yaml json format to spreadsheet
+    # to generate a spreadsheet, convert the yaml json format to spreadsheet
     elif request.form['submitButton'] == 'spreadsheet':
 
             response = _generate_spreadsheet(yaml_json)
@@ -297,6 +297,9 @@ def _generate_spreadsheet(yaml_json):
     # slightly complicated set-up with named temp files to pass structures around and have a persistent file object
     # that we can actually return to the browser
     temp_yaml_filename = ""
+
+    sys.stdout.write(str(DISPLAY_NAME_MAP))
+
     with tempfile.NamedTemporaryFile('w', delete=False) as yaml_file:
         yaml.dump(yaml_json, yaml_file)
         temp_yaml_filename = yaml_file.name
