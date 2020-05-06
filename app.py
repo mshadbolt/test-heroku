@@ -13,6 +13,7 @@ from flask_cors import CORS
 from openpyxl import load_workbook
 from ingest.template.schema_template import SchemaTemplate, UnknownKeySchemaException
 from ingest.template.vanilla_spreadsheet_builder import VanillaSpreadsheetBuilder
+import json
 
 EXCLUDED_PROPERTIES = ["describedBy", "schema_version", "schema_type", "provenance"]
 
@@ -131,6 +132,9 @@ def load_full_schemas():
 # function that loads schemas and modules (references) only for preselection
 @app.route('/load_select', methods=['GET'])
 def selectSchemas():
+    sys.stdout.write("select schemas function\n")
+    sys.stdout.write("this is what the schema template looks like: ")
+    sys.stdout.write(str(SCHEMA_TEMPLATE))
 
     # load the tab config and go through all the schemas
     tab_config = SCHEMA_TEMPLATE.tab_config
@@ -729,7 +733,11 @@ if __name__ == '__main__':
     else:
         api_url = INGEST_API_URL.replace("{env}", env)
 
+    sys.stdout.write(env + "environment selected.\n")
+
     SCHEMA_TEMPLATE = SchemaTemplate(ingest_api_url=api_url,
                                      migrations_url='https://schema.dev.data.humancellatlas.org/property_migrations')
+    sys.stdout.write("schema template loaded\n")
+    sys.stdout.write(str(SCHEMA_TEMPLATE.tab_config))
 
     app.run(threaded=True, port=5000)
